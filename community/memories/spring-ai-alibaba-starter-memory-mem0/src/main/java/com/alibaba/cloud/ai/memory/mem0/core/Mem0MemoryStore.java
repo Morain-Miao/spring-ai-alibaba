@@ -20,6 +20,7 @@ import com.alibaba.cloud.ai.memory.mem0.model.Mem0ServerResp;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.util.JacksonUtils;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -37,9 +38,7 @@ import java.util.stream.Stream;
 import static com.alibaba.cloud.ai.memory.mem0.advisor.Mem0ChatMemoryAdvisor.*;
 
 /**
- * @author miaoyumeng
- * @date 2025/06/24 14:28
- * @description TODO
+ * @author Morain.Miao &#064;date 2025/06/24 14:28 &#064;description TODO
  */
 public class Mem0MemoryStore implements InitializingBean, VectorStore {
 
@@ -80,7 +79,6 @@ public class Mem0MemoryStore implements InitializingBean, VectorStore {
 
 	@Override
 	public void add(List<Document> documents) {
-		// TODO 将role相同的message合并
 		List<Mem0ServerRequest.MemoryCreate> messages = documents.stream()
 			.map(doc -> Mem0ServerRequest.MemoryCreate.builder()
 				.messages(
@@ -91,7 +89,6 @@ public class Mem0MemoryStore implements InitializingBean, VectorStore {
 				.userId(doc.getMetadata().containsKey(USER_ID) ? doc.getMetadata().get(USER_ID).toString() : null)
 				.build())
 			.toList();
-		// TODO 增加异步方式
 		messages.forEach(mem0Client::addMemory);
 	}
 
@@ -101,19 +98,19 @@ public class Mem0MemoryStore implements InitializingBean, VectorStore {
 	}
 
 	@Override
-	public void delete(Filter.Expression filterExpression) {
+	public void delete(Filter.@NotNull Expression filterExpression) {
 		throw new UnsupportedOperationException(
 				"The Mem0 Server only supports delete operation that must include userId, agentId, or runId.");
 	}
 
 	@Override
-	public List<Document> similaritySearch(String query) {
+	public @NotNull List<Document> similaritySearch(String query) {
 		throw new UnsupportedOperationException(
 				"The Mem0 Server only supports queries that must include userId, agentId, or runId.");
 	}
 
 	@Override
-	public List<Document> similaritySearch(SearchRequest request) {
+	public @NotNull List<Document> similaritySearch(SearchRequest request) {
 		Mem0ServerRequest.SearchRequest search = (Mem0ServerRequest.SearchRequest) request;
 
 		if (request.getFilterExpression() != null) {
@@ -137,7 +134,7 @@ public class Mem0MemoryStore implements InitializingBean, VectorStore {
 		List<Mem0ServerResp.Mem0Results> results = mem0ServerResp.getResults();
 		List<Mem0ServerResp.Mem0Relation> relations = mem0ServerResp.getRelations();
 
-		List<Document> documents = Stream.concat(results.stream().map(result -> {
+		return Stream.concat(results.stream().map(result -> {
 			Map<String, Object> meta = new HashMap<>();
 			meta.put("type", "results");
 			meta.put("id", result.getId());
@@ -166,7 +163,6 @@ public class Mem0MemoryStore implements InitializingBean, VectorStore {
 					+ (StringUtils.hasText(relation.getTarget()) ? relation.getTarget() : relation.getDestination());
 			return new Document(text, filterNullElement(meta));
 		})).toList();
-		return documents;
 
 	}
 

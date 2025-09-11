@@ -26,9 +26,10 @@ import java.util.Map;
 
 /**
  * Mem0 Filter Converter
- *
+ * <p>
  * Converts Spring AI's Filter.Expression into a Map format supported by the Mem0 API.
- * Reference: https://docs.mem0.ai/api-reference/memory/v2-search-memories
+ * Reference:
+ * <a href="https://docs.mem0.ai/api-reference/memory/v2-search-memories">...</a>
  */
 public class Mem0FilterExpressionConverter extends AbstractFilterExpressionConverter {
 

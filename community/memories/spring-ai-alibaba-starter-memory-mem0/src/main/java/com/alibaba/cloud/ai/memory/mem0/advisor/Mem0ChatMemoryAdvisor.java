@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 /**
  * Memory is retrieved from a Mem0 added into the prompt's system text. user text.
  *
- * @author Morain Miao
+ * @author Morain.Miao
  * @since 1.0.0
  */
 public class Mem0ChatMemoryAdvisor implements BaseChatMemoryAdvisor {

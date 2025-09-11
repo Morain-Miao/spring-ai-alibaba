@@ -39,6 +39,8 @@ public class Mem0ChatMemoryProperties {
 
 		private int maxRetryAttempts = 3;
 
+		private AsyncConfig async = new AsyncConfig();
+
 		public String getBaseUrl() {
 			return baseUrl;
 		}
@@ -69,6 +71,68 @@ public class Mem0ChatMemoryProperties {
 
 		public void setMaxRetryAttempts(int maxRetryAttempts) {
 			this.maxRetryAttempts = maxRetryAttempts;
+		}
+
+		public AsyncConfig getAsync() {
+			return async;
+		}
+
+		public void setAsync(AsyncConfig async) {
+			this.async = async;
+		}
+
+		public static class AsyncConfig {
+
+			private boolean enabled = true;
+
+			private int corePoolSize = 2;
+
+			private int maxPoolSize = 4;
+
+			private int queueCapacity = 100;
+
+			private String threadNamePrefix = "mem0-async-";
+
+			public boolean isEnabled() {
+				return enabled;
+			}
+
+			public void setEnabled(boolean enabled) {
+				this.enabled = enabled;
+			}
+
+			public int getCorePoolSize() {
+				return corePoolSize;
+			}
+
+			public void setCorePoolSize(int corePoolSize) {
+				this.corePoolSize = corePoolSize;
+			}
+
+			public int getMaxPoolSize() {
+				return maxPoolSize;
+			}
+
+			public void setMaxPoolSize(int maxPoolSize) {
+				this.maxPoolSize = maxPoolSize;
+			}
+
+			public int getQueueCapacity() {
+				return queueCapacity;
+			}
+
+			public void setQueueCapacity(int queueCapacity) {
+				this.queueCapacity = queueCapacity;
+			}
+
+			public String getThreadNamePrefix() {
+				return threadNamePrefix;
+			}
+
+			public void setThreadNamePrefix(String threadNamePrefix) {
+				this.threadNamePrefix = threadNamePrefix;
+			}
+
 		}
 
 	}
